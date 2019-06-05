@@ -1,6 +1,6 @@
 package com.myfood.ingredient.service;
 
-public class EntityNotFoundException extends Exception {
+public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException() {
     }
 

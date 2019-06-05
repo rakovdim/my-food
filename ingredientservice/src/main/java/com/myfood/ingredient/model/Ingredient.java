@@ -1,22 +1,28 @@
 package com.myfood.ingredient.model;
 
-import lombok.*;
-import org.bson.types.ObjectId;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
-@Document(collection = "ingredients")
+@Entity
+@Table(name = "ingredients")
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "graph.Ingredient.eagerly", includeAllAttributes = true)})
 public class Ingredient {
     @Id
     @Getter
-    private ObjectId id;
+    private Long id;
     @Getter
     @Setter
     private String name;
@@ -24,21 +30,64 @@ public class Ingredient {
     @Setter
     private String description;
     @Getter
+    @Embedded
     private FoodEnergy foodEnergy;
     @Getter
+    @Embedded
     private PriceDetails priceDetails;
     @Getter
+    @Embedded
     private NutritionValue nutritionValue;
     @Getter
+    @Embedded
     private InternalDetails internalDetails;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ingredient_tags",
+            joinColumns = @JoinColumn(name = "ingredient_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @Cascade({CascadeType.PERSIST})
     private Set<Tag> tags;
+    @Getter
+    @Setter
+    private boolean deleted;
+
+
+    //todo for future purpose
+    @Transient
+    private String createdBy;
+    @Transient
+    private String modifiedBy;
+    @Transient
+    private LocalDateTime createdWhen;
+    @Transient
+    private LocalDateTime modifiedWhen;
+
+    public Ingredient(String name, String description, FoodEnergy foodEnergy, PriceDetails priceDetails, NutritionValue nutritionValue, InternalDetails internalDetails) {
+        this.name = name;
+        this.description = description;
+        this.foodEnergy = foodEnergy;
+        this.priceDetails = priceDetails;
+        this.nutritionValue = nutritionValue;
+        this.internalDetails = internalDetails;
+        this.deleted = false;
+    }
 
     public void addTag(Tag tag) {
-        tags.add(tag);
+        getTagsEnsure().add(tag);
     }
 
     public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
+        return Collections.unmodifiableSet(getTagsEnsure());
+    }
+
+    public void updateFromModel(Ingredient model) {
+
+    }
+
+    private Set<Tag> getTagsEnsure() {
+        if (tags == null)
+            tags = new HashSet<>();
+        return tags;
     }
 
     @Override
