@@ -1,0 +1,18 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: ${max_file_size:2Mb}
+      max-request-size: ${max_request_size:2Mb}
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+
+
