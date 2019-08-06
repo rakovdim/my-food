@@ -1,6 +1,6 @@
 package com.myfood.dishes.model;
 
-public class ModelException extends RuntimeException {
+public class ModelException extends RuntimeException{
     public ModelException() {
     }
 

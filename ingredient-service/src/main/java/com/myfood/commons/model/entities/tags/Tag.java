@@ -1,4 +1,4 @@
-package com.myfood.commons.model.tags;
+package com.myfood.commons.model.entities.tags;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class Tag {
+public class Tag{
     @Id
     private Long id;
     @Column(nullable = false, updatable = false)

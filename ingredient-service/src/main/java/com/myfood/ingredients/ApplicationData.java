@@ -72,7 +72,7 @@ public class ApplicationData implements CommandLineRunner {
     }
 
     private static byte[] imageToBytes(String ImageName) throws IOException {
-        // open image
+        // open media
         File imgPath = new File(ImageName);
         BufferedImage bufferedImage = ImageIO.read(imgPath);
 

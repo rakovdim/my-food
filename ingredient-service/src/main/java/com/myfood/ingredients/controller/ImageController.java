@@ -31,7 +31,7 @@ public class ImageController {
     }
 
     @PostMapping
-    public ImageDTO uploadImage(@RequestParam("image") MultipartFile image) {
+    public ImageDTO uploadImage(@RequestParam("media") MultipartFile image) {
         Image saved = imageService.saveImage(image);
 
         return imageMapper.toDTO(saved);

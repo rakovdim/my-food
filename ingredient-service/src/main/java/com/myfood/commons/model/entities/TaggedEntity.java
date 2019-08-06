@@ -1,12 +1,16 @@
-package com.myfood.commons.model.tags;
+package com.myfood.commons.model.entities;
 
-import com.myfood.commons.model.BaseEntity;
+
+import com.myfood.dishes.model.dish.details.Tag;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @MappedSuperclass
-public abstract class TaggedEntity extends BaseEntity {
+public abstract class TaggedEntity extends AuditedEntity {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "entity_tags",
