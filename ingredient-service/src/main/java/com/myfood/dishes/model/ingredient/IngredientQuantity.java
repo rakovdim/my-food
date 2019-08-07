@@ -4,30 +4,31 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Created by rakov on 02.08.2019.
  */
 @Embeddable
 public class IngredientQuantity {
-    @Column
-    private Long ingredientId;
+    @Column(nullable = false)
+    private UUID ingredientId;
     @Embedded
     private Weight weight;
-    @Column
-    private Long dishId;
+    @Column(name = "dish_id", updatable = false, insertable = false)
+    private UUID dishId;
 
-    public IngredientQuantity(Long ingredientId, Long dishId, Weight weight) {
+    public IngredientQuantity(UUID ingredientId, UUID dishId, Weight weight) {
         this.ingredientId = ingredientId;
         this.dishId = dishId;
         this.weight = weight;
     }
 
-    public Long getDishId() {
+    public UUID getDishId() {
         return dishId;
     }
 
-    public Long getIngredient() {
+    public UUID getIngredient() {
         return ingredientId;
     }
 

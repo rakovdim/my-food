@@ -1,7 +1,7 @@
 package com.myfood.ingredients.service.image.db;
 
 import com.myfood.ingredients.model.Image;
-import com.myfood.ingredients.service.EntityNotFoundException;
+import com.myfood.commons.service.EntityNotFoundException;
 import com.myfood.ingredients.service.ImageService;
 import com.myfood.ingredients.service.InternalIngredientException;
 import org.springframework.beans.factory.annotation.Autowired;

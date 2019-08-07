@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.UUID;
 
 /**
  * Created by rakov on 06.08.2019.
@@ -14,12 +15,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "dish_comments")
 public class Comment extends AuditedEntity {
-    @Column(nullable = false)
-    private Long dishId;
-    @Column(nullable = false)
-    private Long authorId;
-    @Column(nullable = false)
-    private String content;
+    @Column(name = "dish_id", insertable = false, updatable = false)
+    private UUID dishId;
+    private UUID authorId;
+    private String text;
     @Embedded
     private Rating rating;
+    private UUID parent_id;
 }

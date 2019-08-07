@@ -1,13 +1,15 @@
 package com.myfood.dishes.model.dish;
 
 import com.myfood.commons.model.entities.AuditedEntity;
-import com.myfood.dishes.model.ModelException;
 import com.myfood.dishes.model.comment.Comment;
-import com.myfood.dishes.model.dish.details.*;
+import com.myfood.dishes.model.dish.cooking.Complexity;
+import com.myfood.dishes.model.dish.cooking.Receipt;
+import com.myfood.dishes.model.dish.cooking.ScalingStrategy;
+import com.myfood.dishes.model.dish.details.Tag;
+import com.myfood.dishes.model.dish.social.SocialInfo;
+import com.myfood.dishes.model.dish.social.Visibility;
 import com.myfood.dishes.model.ingredient.IngredientQuantity;
-import com.myfood.dishes.model.ingredient.ScalingStrategy;
 import com.myfood.dishes.model.ingredient.Weight;
-import com.myfood.dishes.model.receipt.Receipt;
 
 import javax.persistence.*;
 import java.util.*;
@@ -22,11 +24,14 @@ public class Dish extends AuditedEntity {
     @Column(nullable = false)
     private String name;
     private String description;
-    private Visibility visibility;
+    @Enumerated(EnumType.STRING)
     private ScalingStrategy scalingStrategy;
+    @Enumerated(EnumType.STRING)
     private Status status;
     @Embedded
-    private MediaInfo mediaInfo;
+    private SocialInfo socialInfo;
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility;
 
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -38,31 +43,37 @@ public class Dish extends AuditedEntity {
     private Receipt receipt;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @MapKey
     @JoinTable(name = "dish_categories", joinColumns = @JoinColumn(name = "dish_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Map<Long, Category> categories;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "dish_tags", joinColumns = @JoinColumn(name = "dish_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Map<Long, Tag> tags;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "dish_tags_mapping", joinColumns = @JoinColumn(name = "dish_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dish_id")
-    @OrderBy("order ASC")
     private List<Principle> principles;
 
     public Dish() {
     }
 
-    public Dish(Long id, Receipt receipt, Visibility visibility) {
+    public Dish(UUID id) {
         super(id);
-        this.receipt = receipt;
-        this.visibility = visibility;
-
-        this.mediaInfo = new MediaInfo();
-        this.status = Status.BASIC;
-        this.tags = new HashMap<>();
+        this.status = Status.NEWLY_CREATED;
+        this.socialInfo = new SocialInfo();
+        this.ingredients = new ArrayList<>();
+        this.tags = new HashSet<>();
         this.categories = new HashMap<>();
         this.principles = new ArrayList<>();
+    }
+
+    public Dish(UUID id, String name, Receipt receipt, Visibility visibility) {
+        this(id);
+
+        this.name = name;
+        setReceipt(receipt);
+        setVisibility(visibility);
     }
 
     public String getName() {
@@ -85,30 +96,30 @@ public class Dish extends AuditedEntity {
         return Collections.unmodifiableList(ingredients);
     }
 
-    public void addIngredient(Long ingredientId, Weight weight) {
+    public void addIngredient(UUID ingredientId, Weight weight) {
         IngredientQuantity ingredientQuantity = new IngredientQuantity(ingredientId, id, weight);
         ingredients.add(ingredientQuantity);
     }
 
     public List<Comment> getComments() {
-        return mediaInfo.getComments();
+        return socialInfo.getComments();
     }
 
 
     public void like() {
-        mediaInfo.getRating().like();
+        socialInfo.getRating().like();
     }
 
     public void dislike() {
-        mediaInfo.getRating().dislike();
+        socialInfo.getRating().dislike();
     }
 
     public Complexity getComplexity() {
         return receipt.getComplexity();
     }
 
-    public MediaInfo getMediaInfo() {
-        return mediaInfo;
+    public SocialInfo getSocialInfo() {
+        return socialInfo;
     }
 
     public Receipt getReceipt() {
@@ -123,24 +134,24 @@ public class Dish extends AuditedEntity {
         categories.put(category.getId(), category);
     }
 
-    public Map<Long, Tag> getTags() {
-        return Collections.unmodifiableMap(tags);
+    public Set<Tag> getTags() {
+        return Collections.unmodifiableSet(tags);
     }
 
     public Optional<Tag> findTag(String name) {
-        return tags.values().stream().filter((tag -> tag.getName().equals(name))).findAny();
+        return tags.stream().filter((tag -> tag.getName().equals(name))).findAny();
     }
 
     public void removeTag(Long id) {
-        tags.remove(id);
+        tags.removeIf(tag -> tag.getId().equals(id));
     }
 
     public void remoteTag(String name) {
-        tags.entrySet().removeIf(tagEntry -> tagEntry.getValue().getName().equals(name));
+        tags.removeIf(tag -> tag.getName().equals(name));
     }
 
     public void addTag(Tag tag) {
-        tags.put(tag.getId(), tag);
+        tags.add(tag);
     }
 
     public Visibility getVisibility() {
@@ -152,7 +163,7 @@ public class Dish extends AuditedEntity {
     }
 
     public Long getAuthorId() {
-        return mediaInfo.getAuthorId();
+        return socialInfo.getAuthorId();
     }
 
     public ScalingStrategy getScalingStrategy() {
@@ -177,14 +188,15 @@ public class Dish extends AuditedEntity {
 
     public void addPrinciple(Principle principle) {
         principles.add(principle);
-        principle.setOrder(principles.size() + 1);
+        principle.setOrdering(principles.size() + 1);
     }
 
-    public void reorderPrinciple(Long principleId, int newPosition) {
-        if (newPosition >= principles.size())
-            throw new ModelException("Principle: " + principleId + ", cant be moved to: " + newPosition + ". Current principles count: " + principles.size());
+    public void removePrinciple(Long principleId) {
+        principles.removeIf(principle -> principle.getId().equals(principleId));
+    }
 
-
+    private void setReceipt(Receipt receipt) {
+        this.receipt = receipt;
     }
 }
 

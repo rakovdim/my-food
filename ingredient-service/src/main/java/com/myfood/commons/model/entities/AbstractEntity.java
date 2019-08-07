@@ -1,24 +1,36 @@
 package com.myfood.commons.model.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 @MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
     @Id
-    protected Long id;
+    protected UUID id;
+    @Column
+    private boolean deleted = false;
 
     public AbstractEntity() {
     }
 
-    public AbstractEntity(Long id) {
+    public AbstractEntity(UUID id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
 
@@ -26,7 +38,7 @@ public abstract class AbstractEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NamedEntity baseModel = (NamedEntity) o;
+        AbstractEntity baseModel = (AbstractEntity) o;
         return Objects.equals(id, baseModel.id);
     }
 

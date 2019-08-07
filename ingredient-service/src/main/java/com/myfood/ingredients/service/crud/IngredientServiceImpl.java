@@ -3,7 +3,7 @@ package com.myfood.ingredients.service.crud;
 import com.myfood.ingredients.events.Events;
 import com.myfood.ingredients.model.Ingredient;
 import com.myfood.ingredients.repository.IngredientRepository;
-import com.myfood.ingredients.service.EntityNotFoundException;
+import com.myfood.commons.service.EntityNotFoundException;
 import com.myfood.ingredients.service.IngredientService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
