@@ -11,13 +11,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IngredientDTO {
-    private Long id;
+    private UUID id;
     @NotBlank
     @Size(min = 1, max = 20)
     private String name;

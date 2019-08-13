@@ -14,5 +14,9 @@ spring:
     properties:
       hibernate.format_sql: true
 
-
+com:
+  myfood:
+    reconciliation:
+      google_enabled: true
+      categories_service: /api/
 

@@ -17,10 +17,13 @@ public interface IngredientRepository extends PagingAndSortingRepository<Ingredi
     List<Ingredient> findByDeletedTrue(Pageable pageable);
 
     @EntityGraph("ingredients-eagerly")
-    @Query("SELECT ingredient FROM Ingredient ingredient WHERE ingredient.id=:id AND deleted=false")
+    @Query("SELECT i FROM Ingredient i WHERE i.id=:id AND i.deleted=false")
     Ingredient findByIdEagerly(@Param("id") Long id);
 
-    @Query("select ingredient from Ingredient ingredient where ingredient.id IN :ids AND deleted=false")
+    @Query("select i from Ingredient i where i.id IN :ids AND i.deleted=false")
     List<Ingredient> findByIds(@Param("ids") List<Long> ids);
+
+    @Query("select i from Ingredient i where i.name IN :names AND i.deleted=false")
+    List<Ingredient> findByNames(@Param("names") List<String> names, Pageable pageable);
 
 }

@@ -1,9 +1,9 @@
 package com.myfood.ingredients.service.crud;
 
+import com.myfood.commons.service.EntityNotFoundException;
 import com.myfood.ingredients.events.Events;
 import com.myfood.ingredients.model.Ingredient;
 import com.myfood.ingredients.repository.IngredientRepository;
-import com.myfood.commons.service.EntityNotFoundException;
 import com.myfood.ingredients.service.IngredientService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 @Service
@@ -75,6 +77,25 @@ public class IngredientServiceImpl implements IngredientService {
         ingredient.setDeleted(true);
 
         eventPublisher.publishEvent(Events.deleted(id));
+    }
+
+    @Override
+    @Transactional
+    public List<UUID> saveAll(List<Ingredient> ingredients) {
+        List<UUID> ids = new ArrayList<>();
+        ingredients.forEach(ingredient -> {
+            ingredient.setId(UUID.randomUUID());
+            if (ingredient.getTags() != null)
+                ingredient.getTags().forEach(tag -> tag.setId(UUID.randomUUID()));
+        });
+        repository.saveAll(ingredients).forEach(ingredient -> ids.add(ingredient.getId()));
+        return ids;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Ingredient> findByNames(List<String> names, int page, int count) {
+        return repository.findByNames(names, getPage(page, count));
     }
 
 

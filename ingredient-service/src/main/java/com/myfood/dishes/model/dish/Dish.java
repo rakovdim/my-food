@@ -45,7 +45,7 @@ public class Dish extends AuditedEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     @MapKey
     @JoinTable(name = "dish_categories", joinColumns = @JoinColumn(name = "dish_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Map<Long, Category> categories;
+    private Map<UUID, Category> categories;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "dish_tags_mapping", joinColumns = @JoinColumn(name = "dish_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -110,9 +110,6 @@ public class Dish extends AuditedEntity {
         socialInfo.getRating().like();
     }
 
-    public void dislike() {
-        socialInfo.getRating().dislike();
-    }
 
     public Complexity getComplexity() {
         return receipt.getComplexity();
@@ -126,7 +123,7 @@ public class Dish extends AuditedEntity {
         return receipt;
     }
 
-    public Map<Long, Category> getCategories() {
+    public Map<UUID, Category> getCategories() {
         return Collections.unmodifiableMap(categories);
     }
 
@@ -162,8 +159,12 @@ public class Dish extends AuditedEntity {
         this.visibility = visibility;
     }
 
-    public Long getAuthorId() {
+    public UUID getAuthorId() {
         return socialInfo.getAuthorId();
+    }
+
+    public void setAuthorId(UUID authorId){
+        socialInfo.setAuthorId(authorId);
     }
 
     public ScalingStrategy getScalingStrategy() {

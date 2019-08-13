@@ -1,8 +1,10 @@
 package com.myfood.ingredients.model;
 
-import com.myfood.ingredients.model.details.*;
+import com.myfood.ingredients.model.details.FoodEnergy;
+import com.myfood.ingredients.model.details.InternalDetails;
+import com.myfood.ingredients.model.details.NutritionValue;
+import com.myfood.ingredients.model.details.Tag;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -17,12 +19,11 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 @Table(name = "ingredients")
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "ingredients-eagerly", includeAllAttributes = true)})
-@NoArgsConstructor
 public class Ingredient {
     @Id
-
     @Getter
-    private Long id;
+    @Setter
+    private UUID id;
     @Getter
     @Setter
     @Column(unique = true, nullable = false)
@@ -30,10 +31,6 @@ public class Ingredient {
     @Getter
     @Setter
     private String description;
-    @Getter
-    @Setter
-    @Column(nullable = false)
-    private VolumeMeasure volumeMeasure;
     @Embedded
     private FoodEnergy foodEnergy = new FoodEnergy();
     //    @Embedded
@@ -73,7 +70,11 @@ public class Ingredient {
 //        this.internalDetails = new InternalDetails();
 //    }
 
-    public Ingredient(Long id) {
+
+    public Ingredient() {
+    }
+
+    public Ingredient(UUID id) {
         this();
         this.id = id;
     }
@@ -120,7 +121,7 @@ public class Ingredient {
     }
 
     public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(getTagsEnsure());
+        return getTagsEnsure();
     }
 
     public void update(Ingredient model) {

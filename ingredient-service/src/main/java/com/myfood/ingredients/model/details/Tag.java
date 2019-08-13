@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -20,7 +21,11 @@ public class Tag extends AbstractEntity {
     public Tag() {
     }
 
-    public Tag(Long id, String name) {
+    public Tag(String name) {
+        this.name = name;
+    }
+
+    public Tag(UUID id, String name) {
         super(id);
         this.name = name;
     }

@@ -14,16 +14,14 @@ public class Rating {
     @Column
     @Getter
     private int likes;
-    @Column
-    @Getter
-    private int dislikes;
 
     public void like() {
         likes++;
     }
 
-    public void dislike() {
-        dislikes++;
+
+    public void unlike() {
+        likes--;
     }
 
 
@@ -32,12 +30,11 @@ public class Rating {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rating rating = (Rating) o;
-        return likes == rating.likes &&
-                dislikes == rating.dislikes;
+        return likes == rating.likes;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(likes, dislikes);
+        return Objects.hash(likes);
     }
 }

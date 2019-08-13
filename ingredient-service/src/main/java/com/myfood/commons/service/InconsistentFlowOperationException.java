@@ -1,6 +1,6 @@
 package com.myfood.commons.service;
 
-public class InconsistentFlowOperationException extends RuntimeException{
+public class InconsistentFlowOperationException extends RuntimeException {
     public InconsistentFlowOperationException() {
     }
 

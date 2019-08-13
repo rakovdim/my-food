@@ -5,13 +5,15 @@ import com.myfood.dishes.model.dish.Dish;
 import com.myfood.dishes.model.dish.cooking.Receipt;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class ModelBuilder {
 
     public static class ReceiptBuilder {
         private Receipt receipt;
 
-        public ReceiptBuilder(Long id) {
+        public ReceiptBuilder(UUID id) {
             this.receipt = new Receipt(id);
         }
     }
@@ -19,7 +21,7 @@ public class ModelBuilder {
     public static class CategoryBuilder {
         private Category category;
 
-        private CategoryBuilder(Long id) {
+        private CategoryBuilder(UUID id) {
             this.category = new Category(id);
         }
 
@@ -41,7 +43,7 @@ public class ModelBuilder {
     public static class DishBuilder {
         private Dish dish;
 
-        private DishBuilder(Long id) {
+        private DishBuilder(UUID id) {
             this.dish = new Dish(id);
         }
 

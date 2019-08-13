@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.UUID;
 
 /**
  * Created by rakov on 06.08.2019.
@@ -18,17 +19,20 @@ import javax.persistence.Table;
 public class Category extends AbstractEntity {
     @Column(nullable = false, unique = true)
     private String name;
+    private String description;
     private String imageId;
+    private int rating;
 
     public Category() {
     }
 
-    public Category(Long id) {
+    public Category(UUID id) {
         super(id);
     }
 
-    public Category(Long id, String name) {
+    public Category(UUID id, String name, int rating) {
         super(id);
         this.name = name;
+        this.rating = rating;
     }
 }
