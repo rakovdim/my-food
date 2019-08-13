@@ -22,7 +22,6 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class Ingredient {
     @Id
     @Getter
-    @Setter
     private UUID id;
     @Getter
     @Setter

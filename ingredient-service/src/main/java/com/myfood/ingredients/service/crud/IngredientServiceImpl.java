@@ -80,16 +80,8 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    @Transactional
     public List<UUID> saveAll(List<Ingredient> ingredients) {
-        List<UUID> ids = new ArrayList<>();
-        ingredients.forEach(ingredient -> {
-            ingredient.setId(UUID.randomUUID());
-            if (ingredient.getTags() != null)
-                ingredient.getTags().forEach(tag -> tag.setId(UUID.randomUUID()));
-        });
-        repository.saveAll(ingredients).forEach(ingredient -> ids.add(ingredient.getId()));
-        return ids;
+        return null;
     }
 
     @Override
