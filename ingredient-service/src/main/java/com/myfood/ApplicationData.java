@@ -1,56 +1,71 @@
 package com.myfood;
 
 
-import com.myfood.commons.utils.ids.IdGenerator;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import com.myfood.ingredients.service.image.db.DBImage;
+import com.myfood.ingredients.service.image.db.DBImageRepository;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 
-@Component
-@Profile("dev")
-public class ApplicationData implements CommandLineRunner {
+@Configuration
+public class ApplicationData {
+    @Value("classpath:pics/breakfast.jpg")
+    private Resource breakfast;
 
-    private IdGenerator<UUID> idGenerator;
+    @Value("classpath:pics/diner.jpg")
+    private Resource diner;
 
-    private Long id = 3L;
+    @Value("classpath:pics/supper.jpg")
+    private Resource supper;
 
-    @Override
-    @Transactional
-    public void run(String... args) throws Exception {
+
+    @Value("classpath:pics/herznaet.png")
+    private Resource herznaet;
+
+    @Value("classpath:pics/drinks.jpg")
+    private Resource drinks;
+
+    @Autowired
+    private DBImageRepository imageRepository;
+
+
+    public Map<String, Resource> getImages() {
+        return new HashMap<String, Resource>() {
+            {
+                put(breakfast.getFilename(), breakfast);
+                put(diner.getFilename(), diner);
+                put(supper.getFilename(), supper);
+                put(herznaet.getFilename(), herznaet);
+                put(drinks.getFilename(), drinks);
+
+            }
+
+        };
     }
 
-    public static void main(String[] args) throws Exception {
+    public void uploadImages() throws Exception {
+        storeImages(getImages());
+    }
 
-        byte[] bytes = imageToBytes("/Users/dima/IdeaProjects/my-food/ingredient-service/src/main/resources/pics/milk.jpg");
-        for (byte b : bytes) {
-            System.out.print(b);
+
+    private void storeImages(Map<String, Resource> images) throws Exception {
+        for (Map.Entry<String, Resource> imageEntry : images.entrySet()) {
+            byte[] imgBytes = IOUtils.toByteArray(imageEntry.getValue().getInputStream());
+
+            DBImage image = new DBImage(imageEntry.getKey());
+            image.setContentType(MediaType.IMAGE_JPEG_VALUE);
+            image.setFileName(imageEntry.getKey());
+            image.setRawImage(imgBytes);
+            image.setSize(100);
+
+            imageRepository.save(image);
         }
     }
-
-    private static byte[] imageToBytes(String ImageName) throws IOException {
-        // open media
-        File imgPath = new File(ImageName);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
-
-        // get DataBufferBytes from Raster
-        WritableRaster raster = bufferedImage.getRaster();
-        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-
-        return (data.getData());
-    }
-
-    private UUID generateId() {
-        return idGenerator.getId();
-    }
-
 }

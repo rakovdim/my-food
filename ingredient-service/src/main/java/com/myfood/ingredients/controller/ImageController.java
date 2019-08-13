@@ -25,7 +25,7 @@ public class ImageController {
         this.imageMapper = imageMapper;
     }
 
-    @GetMapping(value = "/{image_id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> loadImage(@PathVariable String imageId) {
         return ResponseEntity.ok().body(imageService.loadImage(imageId).getRawImage());
     }

@@ -8,14 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@Configuration
 public class Application implements CommandLineRunner {
 
     @Autowired
     private ReconciliationController controller;
+    @Autowired
+    private ApplicationData applicationData;
+
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -25,5 +30,9 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         controller.reconcileEntity(DataSourceType.google, EntityType.categories);
+
+        applicationData.uploadImages();
     }
+
+
 }
