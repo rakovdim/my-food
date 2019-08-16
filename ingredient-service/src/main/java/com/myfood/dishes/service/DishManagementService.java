@@ -97,9 +97,9 @@ public class DishManagementService {
     public void likeComment(UUID dishId, UUID commentId) {
         Dish dish = loadEntityCheckDeleted(dishId);
 
-        Comment comment = dish.getSocialInfo().getComment(commentId).orElseThrow(() -> new EntityNotFoundException("Comment: " + commentId + " for dish: " + dishId + " was not found"));
-
-        comment.getRating().like();
+//        Comment comment = dish.getSocialInfo().getComment(commentId).orElseThrow(() -> new EntityNotFoundException("Comment: " + commentId + " for dish: " + dishId + " was not found"));
+//
+//        comment.getRating().like();
     }
 
 

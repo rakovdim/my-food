@@ -27,7 +27,7 @@ public class CategoriesInMemoryClient implements ClientIntegration<CategoryDTO> 
     public List<UUID> uploadAll(List<CategoryDTO> entities) {
         List<Category> categories = entities.stream().map(dataMapper::categoryDTOtoDO).collect(Collectors.toList());
 
-        return categoryCrudService.saveBulk(categories);
+        return categoryCrudService.createBulk(categories);
     }
 
     @Override

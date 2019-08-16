@@ -119,8 +119,12 @@ public class Dish extends AuditedEntity {
         return socialInfo;
     }
 
-    public Receipt getReceipt() {
-        return receipt;
+    public List<Comment> getComments() {
+        return socialInfo.getComments();
+    }
+
+    public CookingInfo getCookingInfo() {
+        return cookingInfo;
     }
 
     public Map<UUID, Category> getCategories() {
@@ -131,8 +135,16 @@ public class Dish extends AuditedEntity {
         categories.put(category.getId(), category);
     }
 
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
+    public Status getStatus() {
+        return systemInfo.getStatus();
+    }
+
+    public void setStatus(Status status) {
+        systemInfo.setStatus(status);
+    }
+
+    public List<Category> getCategories() {
+        return systemInfo.getCategories();
     }
 
     public Optional<Tag> findTag(String name) {
@@ -187,10 +199,6 @@ public class Dish extends AuditedEntity {
         return Collections.unmodifiableList(principles);
     }
 
-    public void addPrinciple(Principle principle) {
-        principles.add(principle);
-        principle.setOrdering(principles.size() + 1);
-    }
 
     public void removePrinciple(Long principleId) {
         principles.removeIf(principle -> principle.getId().equals(principleId));
