@@ -5,10 +5,10 @@ import com.google.common.collect.Multimap;
 import com.myfood.commons.service.EntityNotFoundException;
 import com.myfood.commons.service.InconsistentFlowOperationException;
 import com.myfood.commons.utils.ids.IdGenerator;
-import com.myfood.dishes.model.comment.Comment;
+import com.myfood.dishes.model.dish.social.Comment;
 import com.myfood.dishes.model.dish.Dish;
-import com.myfood.dishes.model.dish.Status;
-import com.myfood.dishes.model.dish.social.Visibility;
+import com.myfood.dishes.model.dish.system.Status;
+import com.myfood.dishes.model.dish.system.Visibility;
 import com.myfood.dishes.repository.DishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.myfood.dishes.model.dish.Status.*;
+import static com.myfood.dishes.model.dish.system.Status.*;
 
 @Service
 public class DishManagementService {
@@ -62,7 +62,7 @@ public class DishManagementService {
         if (!dish.getVisibility().equals(Visibility.PRIVATE))
             throw new InconsistentFlowOperationException("Dish: " + dish + " can't be shared. Only private dishes can be share. This dish visibility: " + dish.getVisibility());
 
-        dish.setVisibility(Visibility.SHARED);
+       // dish.setVisibility(Visibility.SHARED);
     }
 
     @Transactional
@@ -72,7 +72,7 @@ public class DishManagementService {
         if (!dish.getVisibility().equals(Visibility.SHARED))
             throw new InconsistentFlowOperationException("Dish: " + dish + " can't be unshared. Only shared dishes c be unshared. This dish visibility: " + dish.getVisibility());
 
-        dish.setVisibility(Visibility.PRIVATE);
+     //   dish.setVisibility(Visibility.PRIVATE);
     }
 
     @Transactional

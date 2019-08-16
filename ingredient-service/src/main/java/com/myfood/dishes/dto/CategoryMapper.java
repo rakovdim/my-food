@@ -1,4 +1,4 @@
-package com.myfood.dishes.controller.dto;
+package com.myfood.dishes.dto;
 
 import com.myfood.dishes.model.dish.Category;
 import org.mapstruct.Mapper;

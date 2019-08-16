@@ -2,7 +2,7 @@ package com.myfood.ingredients.model;
 
 import com.myfood.ingredients.model.details.FoodEnergy;
 import com.myfood.ingredients.model.details.InternalDetails;
-import com.myfood.ingredients.model.details.NutritionValue;
+import com.myfood.ingredients.model.details.NutritionInfo;
 import com.myfood.ingredients.model.details.Tag;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +35,7 @@ public class Ingredient {
     //    @Embedded
 //    private PriceDetails priceDetails;
     @Embedded
-    private NutritionValue nutritionValue = new NutritionValue();
+    private NutritionInfo nutritionInfo = new NutritionInfo();
     @Embedded
     private InternalDetails internalDetails = new InternalDetails();
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -65,7 +65,7 @@ public class Ingredient {
 
 //    public Ingredient() {
 //        this.foodEnergy = new FoodEnergy();
-//        this.nutritionValue = new NutritionValue();
+//        this.nutritionInfo = new NutritionInfoDTO();
 //        this.internalDetails = new InternalDetails();
 //    }
 
@@ -79,27 +79,27 @@ public class Ingredient {
     }
 
     public double getFats() {
-        return nutritionValue.getFats();
+        return nutritionInfo.getFats();
     }
 
     public void setFats(double fats) {
-        nutritionValue.setFats(fats);
+        nutritionInfo.setFats(fats);
     }
 
     public double getProteins() {
-        return nutritionValue.getProteins();
+        return nutritionInfo.getProteins();
     }
 
     public void setProteins(double proteins) {
-        nutritionValue.setProteins(proteins);
+        nutritionInfo.setProteins(proteins);
     }
 
     public double getCarbohydrates() {
-        return nutritionValue.getCarbohydrates();
+        return nutritionInfo.getCarbohydrates();
     }
 
     public void setCarbohydrates(double carbohydrates) {
-        nutritionValue.setCarbohydrates(carbohydrates);
+        nutritionInfo.setCarbohydrates(carbohydrates);
     }
 
     public double getCalories() {

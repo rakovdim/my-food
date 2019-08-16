@@ -4,6 +4,7 @@ import com.myfood.ingredients.model.Ingredient;
 import com.myfood.ingredients.service.IngredientService;
 import com.myfood.reconciliation.model.dto.IngredientDTO;
 import com.myfood.reconciliation.service.clients.ClientIntegration;
+import com.myfood.reconciliation.service.clients.ReconcDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

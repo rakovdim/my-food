@@ -1,4 +1,4 @@
-package com.myfood.reconciliation.service.clients.inmemory;
+package com.myfood.reconciliation.service.clients;
 
 import com.myfood.dishes.model.dish.Category;
 import com.myfood.ingredients.model.Ingredient;

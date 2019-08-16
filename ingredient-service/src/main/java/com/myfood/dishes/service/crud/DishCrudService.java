@@ -1,67 +1,81 @@
 package com.myfood.dishes.service.crud;
 
-import com.myfood.commons.service.DefaultCrudService;
-import com.myfood.commons.service.InconsistentFlowOperationException;
-import com.myfood.commons.utils.ids.IdGenerator;
+import com.myfood.commons.service.EntityNotFoundException;
 import com.myfood.dishes.model.dish.Dish;
-import com.myfood.dishes.model.dish.Status;
 import com.myfood.dishes.model.dish.cooking.Receipt;
-import com.myfood.dishes.model.dish.cooking.ReceiptStep;
-import com.myfood.dishes.repository.CategoryRepository;
 import com.myfood.dishes.repository.DishRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-public class DishCrudService extends DefaultCrudService<Dish, DishRepository> {
+public class DishCrudService {
     private DishRepository dishRepository;
+    private DishChangeApplier dishChangeApplier;
 
-    @Autowired
-    public DishCrudService(IdGenerator<UUID> generator, DishRepository dishRepository, CategoryRepository categoryRepository) {
-        super(generator);
+
+    public DishCrudService(DishRepository dishRepository, DishChangeApplier dishChangeApplier) {
         this.dishRepository = dishRepository;
+        this.dishChangeApplier = dishChangeApplier;
     }
 
-    @Override
-    protected DishRepository getRepository() {
-        return dishRepository;
+    @Transactional
+    public Dish createPublicDish(Dish model) {
+        Dish entity = dishChangeApplier.createNewPublicDish();
+
+        dishChangeApplier.applyCategories(model, entity);
+
+        dishChangeApplier.applyPlainData(model, entity);
+        dishChangeApplier.applySocialData(model, entity);
+        dishChangeApplier.applySystemData(model, entity);
+
+        dishChangeApplier.applyIngredients(model, entity);
+        dishChangeApplier.applyReceipt(model, entity);
+        dishChangeApplier.applyTags(model, entity);
+        dishChangeApplier.applyPrinciples(model, entity);
+
+        return dishRepository.save(entity);
     }
 
-    @Override
-    protected Dish createNewEntity(UUID id) {
-        return new Dish(id);
+
+    @Transactional
+    public Dish createPrivateDish(Dish model) {
+        throw new UnsupportedOperationException("Unsupported yet");
     }
 
-    @Override
-    protected void fetch(Dish model, Dish destination) {
 
-        destination.setName(model.getName());
-        destination.setDescription(model.getDescription());
-        destination.setVisibility(model.getVisibility());
-        destination.setScalingStrategy(model.getScalingStrategy());
-        destination.setStatus(Status.NEWLY_CREATED);
-
-        if (model.getReceipt() == null)
-            throw new InconsistentFlowOperationException("Can't create dish without receipt");
-
-        Receipt receiptEntity = new Receipt();
-        Receipt receiptModel = model.getReceipt();
-
-        receiptEntity.setComplexity(receiptModel.getComplexity());
-        if (CollectionUtils.isEmpty(receiptModel.getReceiptSteps()))
-            throw new InconsistentFlowOperationException("Can't create receipt without steps");
-
-        receiptModel.getReceiptSteps().forEach(stepModel -> {
-            ReceiptStep stepEntity = new ReceiptStep(nextId());
-            stepEntity.setContent(stepModel.getContent());
-            stepEntity.setImageId(stepModel.getImageId());
-            stepEntity.setVideoId(stepModel.getVideoId());
-            receiptEntity.addReceiptStep(stepEntity);
-        });
-
-        destination.setAuthorId(model.getAuthorId());
+    @Transactional(readOnly = true)
+    public Dish findDishById(UUID id) {
+        return dishRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Dish: " + id + " was not found. It doesn't exist or marked for deletion"));
     }
+
+
+    @Transactional
+    public void deleteDish(UUID id) {
+        Dish dish = findDishById(id);
+
+        dishRepository.delete(dish);
+    }
+
+
+    @Transactional
+    public void updateReceipt(UUID dishId, Receipt model) {
+        throw new UnsupportedOperationException("Unsupported yet");
+    }
+
+
+    @Transactional
+    public void updateDish(UUID dishId, Dish model) {
+        throw new UnsupportedOperationException("Unsupported yet");
+    }
+
+    @Transactional
+    public List<Dish> createPublicDishesBulk(List<Dish> models) {
+        return models.stream().map(this::createPublicDish).collect(Collectors.toList());
+    }
+
+
 }

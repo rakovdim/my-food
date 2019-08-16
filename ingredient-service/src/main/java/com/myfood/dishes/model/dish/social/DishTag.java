@@ -1,4 +1,4 @@
-package com.myfood.dishes.model.dish.details;
+package com.myfood.dishes.model.dish.social;
 
 import com.myfood.commons.model.entities.AbstractEntity;
 
@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="dish_tag")
-public class Tag extends AbstractEntity {
+public class DishTag extends AbstractEntity {
     @Column(nullable = false, unique = true, updatable = false)
     private String name;
 

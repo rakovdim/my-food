@@ -1,7 +1,7 @@
 package com.myfood.dishes.controller;
 
-import com.myfood.dishes.controller.dto.CategoryDTO;
-import com.myfood.dishes.controller.dto.CategoryMapper;
+import com.myfood.dishes.dto.CategoryDTO;
+import com.myfood.dishes.dto.CategoryMapper;
 import com.myfood.dishes.service.search.CategorySearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

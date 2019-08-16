@@ -69,7 +69,7 @@ public class ReconciliationService {
         if (ingredientDataProcessor == null)
             throw new InternalReconciliationException("No Data Converter for: " + entityType);
 
-        List<IngredientDTO> ingredients = response.getLoadedEntities(entityType).stream().
+        List<IngredientDTO> entities = response.getLoadedEntities(entityType).stream().
                 map(ingredientDataProcessor::convert).collect(Collectors.toList());
 
 
@@ -78,6 +78,6 @@ public class ReconciliationService {
         if (clientIntegration == null)
             throw new InternalReconciliationException("No Client Integration for: " + entityType);
 
-        return clientIntegration.uploadAll(ingredients);
+        return clientIntegration.uploadAll(entities);
     }
 }

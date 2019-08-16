@@ -1,4 +1,4 @@
-package com.myfood.dishes.model.dish.social;
+package com.myfood.dishes.model.dish.system;
 
 /**
  * Created by rakov on 06.08.2019.

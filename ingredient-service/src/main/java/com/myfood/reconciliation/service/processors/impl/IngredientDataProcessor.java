@@ -1,10 +1,11 @@
 package com.myfood.reconciliation.service.processors.impl;
 
-
 import com.myfood.reconciliation.model.dto.IngredientDTO;
 import com.myfood.reconciliation.model.dto.PlainEntity;
 import com.myfood.reconciliation.model.dto.TagDTO;
 import com.myfood.reconciliation.service.processors.DataProcessor;
+import com.myfood.reconciliation.utils.StringDataParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +19,16 @@ import java.util.stream.Collectors;
  */
 @Component
 public class IngredientDataProcessor implements DataProcessor<IngredientDTO> {
+
+    private StringDataParser stringDataParser;
+
+
+    @Autowired
+    public IngredientDataProcessor(StringDataParser stringDataParser) {
+        this.stringDataParser = stringDataParser;
+    }
+
+
     @Override
     public IngredientDTO convert(PlainEntity plainEntity) {
 
@@ -32,23 +43,9 @@ public class IngredientDataProcessor implements DataProcessor<IngredientDTO> {
 
         IngredientDTO ingredientDTO = new IngredientDTO(name, desc, proteins, carbohydrates, fats, calories, imageId);
 
-        if (!StringUtils.isEmpty(tags)) {
-            ingredientDTO.getTags().addAll(getTags(tags));
-        }
+        ingredientDTO.setTags(stringDataParser.parseTags(tags));
 
         return ingredientDTO;
-    }
-
-
-    private Set<TagDTO> getTags(String tags) {
-        String[] tagsArray = tags.split(";");
-        if (tagsArray.length == 0)
-            return Collections.emptySet();
-
-        if (tagsArray.length == 1)
-            return Collections.singleton(new TagDTO(tagsArray[0]));
-
-        return Arrays.stream(tagsArray).map(TagDTO::new).collect(Collectors.toSet());
     }
 
 }

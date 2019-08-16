@@ -1,28 +1,27 @@
 package com.myfood.reconciliation.model.dto;
 
+import java.util.List;
 import java.util.UUID;
+import lombok.Data;
 import lombok.Getter;
 
 /**
  * Created by rakov on 09.08.2019.
  */
+@Data
 public class DishDTO {
-    @Getter
     private String name;
-    @Getter
     private String description;
-    @Getter
     private String complexity;
-    @Getter
     private String visibility;
-    @Getter
     private String imageId;
-    @Getter
     private String videoId;
-    @Getter
-    private UUID authorId;
-    @Getter
+    private String authorId;
     private int likes;
 
+    private List<CategoryDTO> categories;
+    private List<TagDTO> tags;
+    private List<IngredientQuantityDTO> ingredientQuantities;
+    private List<List<String>> receiptSteps;
 
 }

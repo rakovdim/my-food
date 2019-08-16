@@ -1,4 +1,4 @@
-package com.myfood.dishes.model.dish.details;
+package com.myfood.dishes.model.dish.social;
 
 import lombok.Getter;
 

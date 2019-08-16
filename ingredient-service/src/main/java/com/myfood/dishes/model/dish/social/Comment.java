@@ -1,7 +1,7 @@
-package com.myfood.dishes.model.comment;
+package com.myfood.dishes.model.dish.social;
 
 import com.myfood.commons.model.entities.AuditedEntity;
-import com.myfood.dishes.model.dish.details.Rating;
+import com.myfood.dishes.model.dish.social.Rating;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

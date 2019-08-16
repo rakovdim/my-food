@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 
 @Data
 @Embeddable
-public class NutritionValue {
+public class NutritionInfo {
     @Column(nullable = false)
     private double fats;
     @Column(nullable = false)

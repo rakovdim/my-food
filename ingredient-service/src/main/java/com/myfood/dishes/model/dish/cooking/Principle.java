@@ -1,6 +1,7 @@
-package com.myfood.dishes.model.dish;
+package com.myfood.dishes.model.dish.cooking;
 
 import com.myfood.commons.model.entities.AuditedEntity;
+import com.myfood.dishes.model.dish.OrderedItem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,12 +15,12 @@ import java.util.UUID;
 @Data
 public class Principle extends AuditedEntity implements OrderedItem {
 
-    private String text;
+    private String content;
     private int ordering;
 
-    public Principle(UUID id, String text) {
+    public Principle(UUID id, String content) {
         super(id);
-        this.text = text;
+        this.content = content;
     }
 
     public Principle() {

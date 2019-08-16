@@ -2,9 +2,11 @@ package com.myfood.dishes.model.ingredient;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by rakov on 02.08.2019.
@@ -12,47 +14,56 @@ import java.util.UUID;
 @Embeddable
 public class IngredientQuantity {
     @Column(nullable = false)
+    @Getter
     private UUID ingredientId;
-    @Embedded
-    private Weight weight;
-    @Column(name = "dish_id", updatable = false, insertable = false)
-    private UUID dishId;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private VolumeMeasure volumeMeasure;
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private double value;
 
-    public IngredientQuantity(UUID ingredientId, UUID dishId, Weight weight) {
+
+    public IngredientQuantity() {
+    }
+
+
+    public IngredientQuantity(UUID ingredientId, VolumeMeasure volumeMeasure, double value) {
         this.ingredientId = ingredientId;
-        this.dishId = dishId;
-        this.weight = weight;
+        this.volumeMeasure = volumeMeasure;
+        this.value = value;
     }
 
-    public UUID getDishId() {
-        return dishId;
-    }
-
-    public UUID getIngredient() {
-        return ingredientId;
-    }
-
-
-    public Weight getWeight() {
-        return weight;
-    }
-
-
-    public void setWeight(Weight weight) {
-        this.weight = weight;
-    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        IngredientQuantity quantity = (IngredientQuantity) o;
-        return Objects.equals(ingredientId, quantity.ingredientId) &&
-                Objects.equals(weight, quantity.weight);
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        IngredientQuantity that = (IngredientQuantity) o;
+
+        if (Double.compare(that.value, value) != 0)
+            return false;
+        if (ingredientId != null ? !ingredientId.equals(that.ingredientId) : that.ingredientId != null)
+            return false;
+        return volumeMeasure == that.volumeMeasure;
+
     }
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(ingredientId, weight);
+        int result;
+        long temp;
+        result = ingredientId != null ? ingredientId.hashCode() : 0;
+        result = 31 * result + (volumeMeasure != null ? volumeMeasure.hashCode() : 0);
+        temp = Double.doubleToLongBits(value);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

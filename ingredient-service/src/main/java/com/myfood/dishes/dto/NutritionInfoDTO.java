@@ -1,25 +1,25 @@
-package com.myfood.dishes.model.ingredient;
+package com.myfood.dishes.dto;
 
 /**
  * Created by rakov on 02.08.2019.
  */
-public class NutritionValue {
+public class NutritionInfoDTO {
     private double calories;
     private double proteins;
     private double fats;
     private double carbohydrates;
 
 
-    public NutritionValue() {
+    public NutritionInfoDTO() {
     }
 
 
-    public NutritionValue(Number calories, Number proteins, Number fats, Number carbohydrates) {
+    public NutritionInfoDTO(Number calories, Number proteins, Number fats, Number carbohydrates) {
         this(calories.doubleValue(), proteins.doubleValue(), fats.doubleValue(), carbohydrates.doubleValue());
     }
 
 
-    public NutritionValue(double calories, double proteins, double fats, double carbohydrates) {
+    public NutritionInfoDTO(double calories, double proteins, double fats, double carbohydrates) {
         this.calories = calories;
         this.proteins = proteins;
         this.fats = fats;
@@ -67,25 +67,25 @@ public class NutritionValue {
     }
 
 
-    public NutritionValue addFats(double fats) {
+    public NutritionInfoDTO addFats(double fats) {
         setFats(this.fats + fats);
         return this;
     }
 
 
-    public NutritionValue addProts(double prots) {
+    public NutritionInfoDTO addProts(double prots) {
         setProteins(this.proteins + prots);
         return this;
     }
 
 
-    public NutritionValue addCarbs(double carbs) {
+    public NutritionInfoDTO addCarbs(double carbs) {
         setCarbohydrates(this.carbohydrates + carbs);
         return this;
     }
 
 
-    public NutritionValue addCalories(double calories) {
+    public NutritionInfoDTO addCalories(double calories) {
         setCalories(this.calories + calories);
         return this;
     }
@@ -93,11 +93,6 @@ public class NutritionValue {
 
     @Override
     public String toString() {
-        return "NutritionValue{" +
-                ", calories=" + calories +
-                ", proteins=" + proteins +
-                ", fats=" + fats +
-                ", carbohydrates=" + carbohydrates +
-                '}';
+        return "NutritionInfoDTO{" + ", calories=" + calories + ", proteins=" + proteins + ", fats=" + fats + ", carbohydrates=" + carbohydrates + '}';
     }
 }

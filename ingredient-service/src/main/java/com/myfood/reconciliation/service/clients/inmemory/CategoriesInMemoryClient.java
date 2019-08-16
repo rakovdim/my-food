@@ -4,6 +4,7 @@ import com.myfood.dishes.model.dish.Category;
 import com.myfood.dishes.service.crud.CategoryCrudService;
 import com.myfood.reconciliation.model.dto.CategoryDTO;
 import com.myfood.reconciliation.service.clients.ClientIntegration;
+import com.myfood.reconciliation.service.clients.ReconcDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

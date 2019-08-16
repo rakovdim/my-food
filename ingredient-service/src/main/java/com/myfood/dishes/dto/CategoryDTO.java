@@ -1,4 +1,4 @@
-package com.myfood.dishes.controller.dto;
+package com.myfood.dishes.dto;
 
 import lombok.Data;
 

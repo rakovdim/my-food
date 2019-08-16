@@ -1,6 +1,6 @@
 package com.myfood.dishes.service.crud;
 
-import com.myfood.commons.service.DefaultCrudService;
+import com.myfood.commons.service.EntityNotFoundException;
 import com.myfood.commons.utils.ids.IdGenerator;
 import com.myfood.dishes.model.dish.Category;
 import com.myfood.dishes.repository.CategoryRepository;
@@ -13,12 +13,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryCrudService extends DefaultCrudService<Category, CategoryRepository> {
+public class CategoryCrudService {
+    private IdGenerator<UUID> idGenerator;
     private CategoryRepository categoryRepository;
 
-    @Autowired
     public CategoryCrudService(IdGenerator<UUID> idGenerator, CategoryRepository categoryRepository) {
-        super(idGenerator);
+        this.idGenerator = idGenerator;
         this.categoryRepository = categoryRepository;
     }
 
