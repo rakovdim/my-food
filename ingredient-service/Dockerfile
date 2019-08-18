@@ -1,6 +1,10 @@
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+FROM openjdk:8
+RUN mkdir /app
+ARG uuid=2000
+RUN groupadd --gid $uuid myfoods
+RUN useradd -l --uid $uuid --gid $uuid myfood
+COPY target/ingredient-service-1.0.0.jar /app/app.jar
+RUN chown -R myfood:myfoods /app
+RUN chmod -R 770 /app
+USER myfood
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/app.jar"]
