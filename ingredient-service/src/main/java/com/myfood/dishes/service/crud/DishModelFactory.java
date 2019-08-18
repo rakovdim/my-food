@@ -15,6 +15,7 @@ import com.myfood.dishes.model.dish.system.Visibility;
 import com.myfood.dishes.model.ingredient.IngredientQuantity;
 import com.myfood.dishes.repository.CategoryRepository;
 import com.myfood.dishes.repository.DishTagRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -26,12 +27,35 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class DishChangeApplier {
+public class DishModelFactory {
     private CategoryRepository categoryRepository;
     private DishTagRepository dishTagRepository;
     private IdGenerator<UUID> idGen;
     private IngredientsServiceClient ingredientsClient;
 
+    @Autowired
+    public DishModelFactory(CategoryRepository categoryRepository, DishTagRepository dishTagRepository, IdGenerator<UUID> idGen, IngredientsServiceClient ingredientsClient) {
+        this.categoryRepository = categoryRepository;
+        this.dishTagRepository = dishTagRepository;
+        this.idGen = idGen;
+        this.ingredientsClient = ingredientsClient;
+    }
+
+    public Principle createPrinciple(UUID id, String text) {
+        return new Principle(id, text);
+    }
+
+    public Dish createEmptyDish() {
+        return new Dish(idGen.getId());
+    }
+
+    public DishTag createNewTag(String name) {
+        return createNewTag(idGen.getId(), name);
+    }
+
+    public DishTag createNewTag(UUID id, String name) {
+        return new DishTag(id, name);
+    }
 
     public Dish createNewPublicDish() {
         Dish dish = new Dish(idGen.getId());

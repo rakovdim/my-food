@@ -28,11 +28,11 @@ public class SocialInfo {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "dish_id")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "dish_tags_mapping", joinColumns = @JoinColumn(name = "dish_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<DishTag> dishTags;
+    private Set<DishTag> dishTags = new HashSet<>();
 
 
     public SocialInfo() {

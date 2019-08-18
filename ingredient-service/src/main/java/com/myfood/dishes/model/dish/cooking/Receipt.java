@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Receipt extends AuditedEntity {
     @CollectionTable(name = "receipt_steps", foreignKey = @ForeignKey(name = "receipt_id"))
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<ReceiptStep> steps;
+    private List<ReceiptStep> steps = new ArrayList<>();
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

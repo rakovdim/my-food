@@ -39,11 +39,11 @@ public class Dish extends AuditedEntity {
     private String description;
 
     @Embedded
-    private SocialInfo socialInfo;
+    private SocialInfo socialInfo = new SocialInfo();
     @Embedded
-    private CookingInfo cookingInfo;
+    private CookingInfo cookingInfo = new CookingInfo();
     @Embedded
-    private SystemInfo systemInfo;
+    private SystemInfo systemInfo = new SystemInfo();
 
 
     public Dish() {
@@ -114,6 +114,14 @@ public class Dish extends AuditedEntity {
         systemInfo.setStatus(status);
     }
 
+    public void setVisibility(Visibility visibility) {
+        systemInfo.setVisibility(visibility);
+    }
+
+    public void setScalingStrategy(ScalingStrategy scalingStrategy) {
+        systemInfo.setScalingStrategy(scalingStrategy);
+    }
+
     public List<Category> getCategories() {
         return systemInfo.getCategories();
     }
@@ -123,9 +131,20 @@ public class Dish extends AuditedEntity {
         cookingInfo.addPrinciple(principle);
     }
 
+    public void setAuthorId(UUID authorId) {
+        this.socialInfo.setAuthorId(authorId);
+    }
 
     public List<Principle> getPrinciples() {
         return cookingInfo.getPrinciples();
+    }
+
+    public void setImageId(String imageId) {
+        this.socialInfo.setImageId(imageId);
+    }
+
+    public void setVideoId(String videoId) {
+        this.socialInfo.setVideoId(videoId);
     }
 
 
@@ -179,6 +198,39 @@ public class Dish extends AuditedEntity {
             return;
 
         consumer.accept(item);
+    }
+
+    private SocialInfo getSocialInfoEnsure() {
+        return getOrCreate(socialInfo, SocialInfo::new, this::setSocialInfo);
+    }
+
+    private SystemInfo getSystemInfoEnsure() {
+        return getOrCreate(systemInfo, SystemInfo::new, this::setSystemInfo);
+    }
+
+    private CookingInfo getCookingInfoEnsure() {
+        return getOrCreate(cookingInfo, CookingInfo::new, this::setCookingInfo);
+    }
+
+    private <T> T getOrCreate(T object, Supplier<T> creteAction, Consumer<T> setAction) {
+        if (object != null)
+            return object;
+
+        object = creteAction.get();
+        setAction.accept(object);
+        return object;
+    }
+
+    private void setSocialInfo(SocialInfo socialInfo) {
+        this.socialInfo = socialInfo;
+    }
+
+    private void setCookingInfo(CookingInfo cookingInfo) {
+        this.cookingInfo = cookingInfo;
+    }
+
+    private void setSystemInfo(SystemInfo systemInfo) {
+        this.systemInfo = systemInfo;
     }
 }
 

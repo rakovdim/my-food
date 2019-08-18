@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class DishCrudService {
     private DishRepository dishRepository;
-    private DishChangeApplier dishChangeApplier;
+    private DishModelFactory dishChangeApplier;
 
 
-    public DishCrudService(DishRepository dishRepository, DishChangeApplier dishChangeApplier) {
+    public DishCrudService(DishRepository dishRepository, DishModelFactory dishChangeApplier) {
         this.dishRepository = dishRepository;
         this.dishChangeApplier = dishChangeApplier;
     }
@@ -57,9 +57,20 @@ public class DishCrudService {
     public void deleteDish(UUID id) {
         Dish dish = findDishById(id);
 
+        dish.setDeleted(true);
+    }
+
+    @Transactional
+    public void forceDeleteDish(UUID id) {
+        Dish dish = findDishById(id);
+
         dishRepository.delete(dish);
     }
 
+    @Transactional
+    public void forceDeleteAllDishes() {
+        dishRepository.deleteAll();
+    }
 
     @Transactional
     public void updateReceipt(UUID dishId, Receipt model) {
@@ -76,6 +87,5 @@ public class DishCrudService {
     public List<Dish> createPublicDishesBulk(List<Dish> models) {
         return models.stream().map(this::createPublicDish).collect(Collectors.toList());
     }
-
 
 }

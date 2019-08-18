@@ -28,11 +28,11 @@ public class CookingInfo {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "dish_ingredients", joinColumns = @JoinColumn(name = "dish_id"))
-    private List<IngredientQuantity> ingredients;
+    private List<IngredientQuantity> ingredients = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dish_id")
-    private List<Principle> principles;
+    private List<Principle> principles = new ArrayList<>();
 
 
     public CookingInfo() {

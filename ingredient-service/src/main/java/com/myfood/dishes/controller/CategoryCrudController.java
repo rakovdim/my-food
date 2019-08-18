@@ -1,7 +1,7 @@
 package com.myfood.dishes.controller;
 
 import com.myfood.dishes.dto.CategoryDTO;
-import com.myfood.dishes.dto.CategoryMapper;
+import com.myfood.dishes.dto.mappers.CategoryMapper;
 import com.myfood.dishes.service.search.CategorySearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +28,6 @@ public class CategoryCrudController {
 
     @GetMapping("/top/{count}")
     public List<CategoryDTO> getTop(@PathVariable int count) {
-        return categorySearchService.findTopCategories(count).stream().map(categoryMapper::categoryDTOfromDO).collect(Collectors.toList());
+        return categorySearchService.findTopCategories(count).stream().map(categoryMapper::mapCategoryDTOfromDO).collect(Collectors.toList());
     }
 }

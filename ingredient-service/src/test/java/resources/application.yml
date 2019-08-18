@@ -1,0 +1,4 @@
+logging:
+  level:
+    com.myfood.testloglevel: INFO
+    org.springframework: INFO

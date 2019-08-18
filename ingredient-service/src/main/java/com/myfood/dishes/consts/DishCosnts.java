@@ -7,4 +7,5 @@ public interface DishCosnts {
     String IMAGES_PATH = "images";
     String AND = "/";
     String SEARCH_PATH = "search";
+    String ADMIN = "admin";
 }

@@ -24,7 +24,7 @@ public class IngredientCrudController {
         this.ingredientMapper = mapper;
     }
 
-    @GetMapping("/{ingredient_id}")
+    @GetMapping("/{ingredientId}")
     public IngredientDTO getIngredient(@PathVariable Long ingredientId) {
         Ingredient ingredient = ingredientService.getIngredient(ingredientId);
 
